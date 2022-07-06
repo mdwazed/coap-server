@@ -1,0 +1,10 @@
+aiocoap==0.4.3
+google==3.0.0
+google-api-core==2.8.2
+google-api-python-client==2.52.0
+google-auth==2.9.0
+google-auth-httplib2==0.1.0
+google-cloud==0.34.0
+googleapis-common-protos==1.56.3
+protobuf==3.20.0
+psycopg2-binary==2.9.3
