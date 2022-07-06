@@ -49,6 +49,7 @@ class Measurements(resource.Resource):
         device_config = proto_config_pb2.ProtoConfig()
         device_config.request_device_info = True
         device_config.request_configuration = True
+        device_config.transmission_interval = 180
         # Serializing device config.
         response_payload = device_config.SerializeToString()
 
