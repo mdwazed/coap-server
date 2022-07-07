@@ -53,11 +53,11 @@ class Measurements(resource.Resource):
         
         device_config.request_device_info = True
         device_config.request_configuration = True
-        device_config.transmission_interval = 120
+        device_config.transmission_interval = 60
 
         if ser_num == 'KCwCQOZz':
             logging.info(f'Changing transmission interval for KCwCQOZz')
-            device_config.transmission_interval = 120
+            device_config.transmission_interval = 60
         # Serializing device config.
         response_payload = device_config.SerializeToString()
 
@@ -191,7 +191,7 @@ async def main():
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     streamHandler.setFormatter(formatter)
     fileHandler.setFormatter(formatter)
-    logger.addHandler(streamHandler)
+    # logger.addHandler(streamHandler)
     logger.addHandler(fileHandler)
 
 
