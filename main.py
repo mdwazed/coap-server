@@ -4,7 +4,6 @@ import datetime
 import logging
 import os.path
 import time
-import sys
 
 import aiocoap
 import aiocoap.resource as resource
@@ -199,7 +198,7 @@ async def main():
 
     # Starting the application on set IP address and port.
     logging.info('Creating server in port 5683')
-    await aiocoap.Context.create_server_context(root, ('0.0.0.0', 5683))
+    await aiocoap.Context.create_server_context(root, ('127.0.0.1', 5683))
     # Getting the current event loop and create an asyncio.Future object attached to the event loop.
     await asyncio.get_running_loop().create_future()
 
