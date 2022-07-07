@@ -117,7 +117,7 @@ class Measurements(resource.Resource):
         
         resp_msg = aiocoap.Message(mtype=aiocoap.ACK, code=aiocoap.Code.CREATED,
                                token=request.token, payload=response_payload)
-        logging.info(f'response meg: {resp_msg}')
+        logging.info(f'response msg: {resp_msg}')
         return resp_msg
 
 
@@ -208,7 +208,7 @@ async def main():
 
     # Starting the application on set IP address and port.
     logger.info('listening to 5683')
-    await aiocoap.Context.create_server_context(root, ('127.0.0.1', 5683))
+    await aiocoap.Context.create_server_context(root, ('0.0.0.0', 5683))
     # Getting the current event loop and create an asyncio.Future object attached to the event loop.
     await asyncio.get_running_loop().create_future()
 
