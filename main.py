@@ -198,7 +198,7 @@ async def main():
     root.add_resource(["t"], Time())
 
     # Starting the application on set IP address and port.
-    logging.info('listening to 5683')
+    logging.info('Creating server in port 5683')
     await aiocoap.Context.create_server_context(root, ('0.0.0.0', 5683))
     # Getting the current event loop and create an asyncio.Future object attached to the event loop.
     await asyncio.get_running_loop().create_future()
