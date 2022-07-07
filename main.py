@@ -4,6 +4,7 @@ import datetime
 import logging
 import os.path
 import time
+import sys
 
 import aiocoap
 import aiocoap.resource as resource
@@ -43,13 +44,20 @@ class Measurements(resource.Resource):
         # Creating a dictionary from a received message.
         data = [MessageToDict(proto_measurements_pb2.ProtoMeasurements().FromString(request.payload))]
         logging.info(f'received payload data: {data}')
+        ser_num = data[0]['serialNum']
+        logging.info(f'Serial num: {ser_num}')
         record = []
         changeAt = []
         # Set request_device_info to true
         device_config = proto_config_pb2.ProtoConfig()
+        
         device_config.request_device_info = True
         device_config.request_configuration = True
-        device_config.transmission_interval = 180
+        device_config.transmission_interval = 120
+
+        if ser_num == 'KCwCQOZz':
+            logging.info(f'Changing transmission interval for KCwCQOZz')
+            device_config.transmission_interval = 120
         # Serializing device config.
         response_payload = device_config.SerializeToString()
 
@@ -176,8 +184,17 @@ class Time(resource.Resource):
 
 
 async def main():
-    logging.basicConfig(filename='coap_server.log', level=logging.DEBUG,
-                        format='%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+    logging.basicConfig(level=logging.DEBUG)
+    logger = logging.getLogger()
+    fileHandler = logging.FileHandler("coap_server.log")
+    streamHandler = logging.StreamHandler(sys.stdout)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    streamHandler.setFormatter(formatter)
+    fileHandler.setFormatter(formatter)
+    logger.addHandler(streamHandler)
+    logger.addHandler(fileHandler)
+
+
     # Resource tree creation
     root = resource.Site()
     # Set up “m” endpoint, which will be receiving measurements sent by Efento NB-IoT sensor using POST method
@@ -190,8 +207,8 @@ async def main():
     root.add_resource(["t"], Time())
 
     # Starting the application on set IP address and port.
-    logging.info('listening to 5683')
-    await aiocoap.Context.create_server_context(root, ('0.0.0.0', 5683))
+    logger.info('listening to 5683')
+    await aiocoap.Context.create_server_context(root, ('127.0.0.1', 5683))
     # Getting the current event loop and create an asyncio.Future object attached to the event loop.
     await asyncio.get_running_loop().create_future()
 
