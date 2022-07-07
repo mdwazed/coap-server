@@ -52,11 +52,13 @@ class Measurements(resource.Resource):
         
         device_config.request_device_info = True
         device_config.request_configuration = True
-        device_config.transmission_interval = 60
+        device_config.transmission_interval = 300
 
         if ser_num == 'KCwCQOZz':
-            logging.info(f'Changing transmission interval for KCwCQOZz')
-            device_config.transmission_interval = 60
+            logging.info(f'Changing transmission interval for {ser_num}')
+            device_config.transmission_interval = 300
+            device_config.measurement_period_base = 60
+            device_config.measurement_period_factor= 2
         # Serializing device config.
         response_payload = device_config.SerializeToString()
 
@@ -198,7 +200,7 @@ async def main():
 
     # Starting the application on set IP address and port.
     logging.info('Creating server in port 5683')
-    await aiocoap.Context.create_server_context(root, ('127.0.0.1', 5683))
+    await aiocoap.Context.create_server_context(root, ('0.0.0.0', 5683))
     # Getting the current event loop and create an asyncio.Future object attached to the event loop.
     await asyncio.get_running_loop().create_future()
 
